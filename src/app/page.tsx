@@ -19,26 +19,34 @@ export default function Home({ searchParams }: Readonly<Props>) {
     setFileName("frame.png");
     reader.readAsDataURL(blob);
   };
+  const refreshOnce = (): void => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const hasRefreshed = urlParams.get("refreshed");
+
+    if (!hasRefreshed) {
+      // Tambahkan tanda di URL untuk mencegah refresh berikutnya
+      urlParams.set("refreshed", "true");
+      window.location.search = urlParams.toString(); // Refresh halaman dengan tanda
+    }
+  };
   useEffect(() => {
     handleLoadImage();
+    refreshOnce();
   }, []);
+
+  // Panggil fungsi saat halaman diakses
+  refreshOnce();
 
   return (
     <div className="w-screen flex items-center justify-center flex-col gap-12 p-6">
       <div className="w-full md:w-1/2">
         <h1 className="text-[22px] sm:text-[36px] font-bold leading-[130%] mb-[18px]">
           <span className="text-primary-500 text-[40px] sm:text-[50px]">
-            HUT ke-79
             <br />
           </span>{" "}
-          Nusantara Baru Indonesia Maju
         </h1>
         <p className="text-neutral-500 leading-[160%]">
-          Mari rayakan HUT RI ke-79 dengan semangat{" "}
-          <span className="text-primary-500">
-            Nusantara Baru Indonesia Maju
-          </span>
-          . Buat Twibbon kamu sekarang dan tunjukkan cinta untuk tanah air!
+          <span className="text-primary-500"></span>
         </p>
       </div>
       <RenderForm searchParams={searchParams} />
